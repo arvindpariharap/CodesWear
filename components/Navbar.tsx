@@ -22,7 +22,7 @@ const Navbar = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
   };
   const ref = useRef();
   return (
-    <div className="flex flex-col md:flex-row md:justify-start justify-center items-center py-2 shadow-md">
+    <div className="flex flex-col md:flex-row md:justify-start justify-center items-center py-2 shadow-md sticky top-0 bg-white z-10">
       <div className="logo">
         <Link href={"/"}>
           <Image width={200} height={40} src="/logo.png" alt="" />
@@ -52,7 +52,7 @@ const Navbar = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
       </div>
       <div
         ref={ref}
-        className="w-72 h-full sideCart absolute top-0 right-0 bg-pink-100 px-8 py-10 transform transition-transform translate-x-full"
+        className={`w-72 h-[100vh] sideCart absolute top-0 right-0 bg-pink-100 px-8 py-10 transform transition-transform ${Object.keys(cart).length !== 0 ? 'translate-x-0': 'translate-x-full'}`}
       >
         <h2 className="font-bold text-xl text-center">Shopping Cart</h2>
         <div
@@ -63,34 +63,53 @@ const Navbar = ({ cart, addToCart, removeFromCart, clearCart, subTotal }) => {
         </div>
         <ol className="list-decimal font-semibold">
           {Object.keys(cart).length == 0 && (
-            <div className="my-4 font-semibold">
-              You cart is Empty!
-            </div>
+            <div className="my-4 font-semibold">You cart is Empty!</div>
           )}
           {Object.keys(cart).map((k) => {
             return (
               <li key={k}>
-                <div className="item flex">
-                  <div className="w-2/3 font-semibold">
-                    {cart[k].name}
-                  </div>
+                <div className="item flex my-5">
+                  <div className="w-2/3 font-semibold">{cart[k].name}</div>
                   <div className="w-1/3 font-semibold flex items-center justify-center text-lg">
-                    <AiFillMinusCircle onClick={() => removeFromCart(k, 1,cart[k].price, cart[k].name,cart[k].size, cart[k].variant)} className="cursor-pointer text-pink-500" />
+                    <AiFillMinusCircle
+                      onClick={() =>
+                        removeFromCart(
+                          k,
+                          1,
+                          cart[k].price,
+                          cart[k].name,
+                          cart[k].size,
+                          cart[k].variant
+                        )
+                      }
+                      className="cursor-pointer text-pink-500"
+                    />
                     <span className="mx-2 text-sm">{cart[k].qty}</span>
-                    <AiFillPlusCircle onClick={() => addToCart(k, 1,cart[k].price, cart[k].name,cart[k].size, cart[k].variant)} className="cursor-pointer text-pink-500" />
+                    <AiFillPlusCircle
+                      onClick={() =>
+                        addToCart(
+                          k,
+                          1,
+                          cart[k].price,
+                          cart[k].name,
+                          cart[k].size,
+                          cart[k].variant
+                        )
+                      }
+                      className="cursor-pointer text-pink-500"
+                    />
                   </div>
                 </div>
               </li>
             );
           })}
         </ol>
+        <div className="font-bold my-2">Subtotal:₹{subTotal}</div>
         <div className="flex mt-5">
-          <button
-            className="mx-2 inline-flex text-white bg-pink-500 border-0 py-1 px-2 focus:outline-none hover:bg-pink-600 rounded"
-          >
+          <Link href={'/checkout'}><button className="mx-2 inline-flex text-white bg-pink-500 border-0 py-1 px-2 focus:outline-none hover:bg-pink-600 rounded">
             <BsFillBagCheckFill className="m-1" />
             Checkout
-          </button>
+          </button></Link>
           <button
             onClick={clearCart}
             className="max-2 inline-flex text-white bg-pink-500 border-0 py-1 px-2 focus:outline-none hover:bg-pink-600 rounded"
