@@ -65,5 +65,4 @@ const Forgot = () => {
     </div>
   );
 };
-
 export default Forgot;
